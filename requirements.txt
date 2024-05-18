@@ -1,0 +1,6 @@
+# requires python 3.7 to build
+# build steps:
+# poetry build
+# poestry install
+
+scidownl

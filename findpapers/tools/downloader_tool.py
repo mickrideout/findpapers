@@ -11,6 +11,7 @@ import findpapers.utils.common_util as common_util
 import findpapers.utils.persistence_util as persistence_util
 from findpapers.models.search import Search
 from findpapers.utils.requests_util import DefaultSession
+from scidownl.api.scihub import scihub_download
 
 
 def download(search_path: str, output_directory: str, only_selected_papers: Optional[bool] = False,
@@ -64,6 +65,8 @@ def download(search_path: str, output_directory: str, only_selected_papers: Opti
         now = datetime.datetime.now()
         fp.write(
             f"------- A new download process started at: {datetime.datetime.strftime(now, '%Y-%m-%d %H:%M:%S')} \n")
+        
+    tried_dois = set()
 
     for i, paper in enumerate(search.papers):
 
@@ -201,6 +204,11 @@ def download(search_path: str, output_directory: str, only_selected_papers: Opti
                         fp.write(response.content)
                     downloaded = True
                     break
+                
+                if (not (paper.doi in tried_dois)):
+                    print("Download from scihub doi: ", paper.doi)
+                    scihub_download(paper.doi, out=output_filepath, scihub_url="https://sci-hub.st/")
+                    tried_dois.append(paper.doi)
 
             except Exception as e:  # pragma: no cover
                 logging.debug(e, exc_info=True)

@@ -207,7 +207,7 @@ def download(search_path: str, output_directory: str, only_selected_papers: Opti
                 
                 if (not (paper.doi in tried_dois)):
                     print("Download from scihub doi: ", paper.doi)
-                    scihub_download(paper.doi, out=output_filepath, scihub_url="https://sci-hub.st/")
+                    scihub_download(paper.doi, out=output_filepath)
                     tried_dois.append(paper.doi)
 
             except Exception as e:  # pragma: no cover
